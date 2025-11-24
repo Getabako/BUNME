@@ -7,17 +7,64 @@
     <style>
         /* ===== CSS Variables ===== */
         :root {
-            --primary-color: #6b46c1;
-            --secondary-color: #d69e2e;
-            --dark-bg: #1a1a2e;
-            --darker-bg: #16213e;
-            --card-bg: #0f3460;
-            --monster-color: #9b2c2c;
-            --hero-color: #2b6cb0;
-            --text-light: #e2e8f0;
-            --text-muted: #a0aec0;
-            --success-color: #48bb78;
-            --warning-color: #ed8936;
+            --primary-color: #8b5cf6;
+            --secondary-color: #f59e0b;
+            --dark-bg: #0c0c1d;
+            --darker-bg: #060612;
+            --card-bg: #1a1a3e;
+            --monster-color: #dc2626;
+            --hero-color: #3b82f6;
+            --text-light: #f1f5f9;
+            --text-muted: #94a3b8;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --gold-accent: #fbbf24;
+            --mystic-glow: rgba(139, 92, 246, 0.3);
+        }
+
+        /* ===== Mystical Background Effect ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ===== Floating Particles ===== */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold-accent);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
         }
 
         /* ===== Reset & Base ===== */
@@ -204,17 +251,19 @@
 
         /* ===== Cards ===== */
         .card {
-            background: var(--card-bg);
+            background: linear-gradient(145deg, var(--card-bg), rgba(26, 26, 62, 0.8));
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            border: 2px solid transparent;
+            border: 1px solid rgba(139, 92, 246, 0.3);
             transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .card:hover {
-            border-color: var(--primary-color);
+            border-color: var(--gold-accent);
             transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.2);
         }
 
         .card-monster {
@@ -258,6 +307,99 @@
 
         .badge-skill {
             background: var(--success-color);
+        }
+
+        /* ===== Tarot Card Style ===== */
+        .tarot-card {
+            background: linear-gradient(135deg, #1a1a3e 0%, #0f0f2d 100%);
+            border: 3px solid var(--gold-accent);
+            border-radius: 16px;
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .tarot-card::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        .tarot-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(251, 191, 36, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .tarot-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow:
+                0 20px 60px rgba(139, 92, 246, 0.3),
+                0 0 40px rgba(251, 191, 36, 0.2);
+        }
+
+        .tarot-card .card-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.5));
+        }
+
+        .tarot-card .card-name {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: var(--gold-accent);
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tarot-card .card-desc {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+        }
+
+        .tarot-card.monster-type {
+            border-color: var(--monster-color);
+        }
+
+        .tarot-card.monster-type .card-name {
+            color: #f87171;
+        }
+
+        .tarot-card.hero-type {
+            border-color: var(--hero-color);
+        }
+
+        .tarot-card.hero-type .card-name {
+            color: #60a5fa;
+        }
+
+        .tarot-card.skill-type {
+            border-color: var(--success-color);
+        }
+
+        .tarot-card.skill-type .card-name {
+            color: #34d399;
         }
 
         /* ===== Character Card Display ===== */
@@ -715,14 +857,222 @@
         .hidden {
             display: none !important;
         }
+
+        /* ===== Binary Choice (Swipe UI) ===== */
+        .binary-choice-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: stretch;
+            margin: 30px 0;
+            perspective: 1000px;
+        }
+
+        .choice-card {
+            flex: 1;
+            max-width: 280px;
+            background: linear-gradient(135deg, #1a1a3e 0%, #0f0f2d 100%);
+            border: 3px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .choice-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .choice-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            border-color: var(--gold-accent);
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(251, 191, 36, 0.2);
+        }
+
+        .choice-card.selected {
+            border-color: var(--gold-accent);
+            background: linear-gradient(135deg, #2a2a5e 0%, #1a1a4d 100%);
+            transform: scale(1.05);
+        }
+
+        .choice-card.swiped-left {
+            animation: swipeLeft 0.5s ease forwards;
+        }
+
+        .choice-card.swiped-right {
+            animation: swipeRight 0.5s ease forwards;
+        }
+
+        @keyframes swipeLeft {
+            to {
+                transform: translateX(-150%) rotate(-20deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes swipeRight {
+            to {
+                transform: translateX(150%) rotate(20deg);
+                opacity: 0;
+            }
+        }
+
+        .choice-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.5));
+        }
+
+        .choice-text {
+            font-size: 0.95em;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .choice-hint {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-top: 15px;
+        }
+
+        .vs-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--gold-accent);
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+        }
+
+        /* ===== Mystic Feedback ===== */
+        .mystic-feedback {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .mystic-feedback p {
+            font-style: italic;
+            color: var(--gold-accent);
+            font-size: 1.1em;
+            margin: 0;
+        }
+
+        .mystic-feedback .insight {
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-top: 10px;
+            font-style: normal;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== Enhanced Header ===== */
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, transparent, var(--gold-accent), transparent) 1;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '✧';
+            position: absolute;
+            left: 50%;
+            bottom: -12px;
+            transform: translateX(-50%);
+            color: var(--gold-accent);
+            font-size: 1.2em;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            background: linear-gradient(90deg, var(--gold-accent), #fef3c7, var(--gold-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            letter-spacing: 0.1em;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            margin-top: 10px;
+            font-size: 0.95em;
+        }
+
+        /* ===== Mystical Section Titles ===== */
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold-accent), transparent);
+        }
+
+        /* ===== Mobile Swipe Support ===== */
+        @media (max-width: 600px) {
+            .binary-choice-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .choice-card {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .vs-divider {
+                padding: 10px 0;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
     <div class="container">
         <!-- Header -->
         <header class="header">
             <h1>BUNME</h1>
-            <p>自己理解をカードバトルに変える分身育成ゲーム</p>
+            <p>魂の錬成 ─ デジタル分身育成の書</p>
         </header>
 
         <!-- Progress Bar -->
@@ -742,22 +1092,25 @@
         <!-- Screen 1: Welcome -->
         <div class="screen active" id="screen-welcome">
             <div class="character-card">
-                <div class="character-avatar">🎮</div>
-                <h2 class="character-name">BUNMEへようこそ</h2>
-                <p class="character-title">60日間の冒険が始まります</p>
+                <div class="character-avatar">🔮</div>
+                <h2 class="character-name">魂の錬成所へようこそ</h2>
+                <p class="character-title">自分を知る冒険が、最強の武器（分身）を作る</p>
             </div>
             <div class="card mt-20">
-                <h3>BUNMEとは？</h3>
-                <p class="mt-20">遊びながら、自分とビジネスとAIを育てる冒険です。</p>
+                <h3>✧ BUNMEとは？</h3>
+                <p class="mt-20">あなたの思考、嗜好、文体を「カード」として収集し、デジタル・クローン（分身）を錬成する魔導書です。</p>
                 <ul style="margin: 15px 0 15px 20px;">
-                    <li>陰（モンスター）：苦手・課題パターンを可視化</li>
-                    <li>陽（ヒーロー）：得意・強み資質を可視化</li>
-                    <li>クエストを通じて成長を記録</li>
-                    <li>活動を発信コンテンツに変換</li>
+                    <li><strong>ダークカード（影）</strong>：嫌いなこと、許せないこと、ストレスの源</li>
+                    <li><strong>ヒーローカード（光）</strong>：好きなこと、得意なこと、大切な価値観</li>
+                    <li><strong>スキル・アーティファクト</strong>：人生で獲得した成果や技術</li>
+                    <li><strong>文体DNA</strong>：あなただけの言葉遣いと思考パターン</li>
                 </ul>
             </div>
+            <div class="mystic-feedback">
+                <p>「君の深層を覗く準備はできたか？」</p>
+            </div>
             <div class="text-center mt-20">
-                <button class="btn btn-primary" onclick="goToScreen('screen-register')">冒険を始める</button>
+                <button class="btn btn-primary" onclick="goToScreen('screen-register')">錬成を開始する</button>
             </div>
         </div>
 
@@ -794,18 +1147,30 @@
             </div>
         </div>
 
-        <!-- Screen 3: Quiz -->
+        <!-- Screen 3: Quiz (Binary Choice) -->
         <div class="screen" id="screen-quiz">
-            <h2 class="mb-20">本格クイズフロー診断</h2>
-            <p class="mb-20" style="color: var(--text-muted);">質問に答えて、あなたの特性を診断します。</p>
+            <h2 class="mb-20">✧ 二者択一の試練</h2>
+            <p class="mb-20" style="color: var(--text-muted);">直感で選べ。君の深層心理が、カードとなって現れる。</p>
 
             <div id="quizContainer">
-                <div class="card">
-                    <p id="quizQuestion" style="font-size: 1.1em; margin-bottom: 20px;"></p>
-                    <div class="quiz-options" id="quizOptions"></div>
+                <p id="quizQuestion" style="font-size: 1.1em; margin-bottom: 20px; text-align: center; color: var(--gold-accent);"></p>
+
+                <div class="binary-choice-container" id="binaryChoiceContainer">
+                    <div class="choice-card" id="choiceLeft" onclick="selectBinaryChoice(0)">
+                        <div class="choice-icon" id="choiceLeftIcon">⚡</div>
+                        <div class="choice-text" id="choiceLeftText"></div>
+                    </div>
+                    <div class="vs-divider">VS</div>
+                    <div class="choice-card" id="choiceRight" onclick="selectBinaryChoice(1)">
+                        <div class="choice-icon" id="choiceRightIcon">🌙</div>
+                        <div class="choice-text" id="choiceRightText"></div>
+                    </div>
                 </div>
+
+                <div id="mysticFeedbackContainer"></div>
+
                 <div class="text-center mt-20">
-                    <span id="quizProgress">1 / 10</span>
+                    <span id="quizProgress" style="color: var(--text-muted);">1 / 10</span>
                 </div>
             </div>
 
@@ -816,21 +1181,23 @@
 
         <!-- Screen 4: Card Generation -->
         <div class="screen" id="screen-cards">
-            <h2 class="mb-20">STEP 2: カード召喚の祭壇</h2>
-            <p class="mb-20" style="color: var(--text-muted);">診断結果からあなたのカードが生成されました！</p>
+            <h2 class="mb-20">✧ カード召喚の祭壇</h2>
+            <p class="mb-20" style="color: var(--text-muted);">試練の結果、君の魂からカードが召喚された...</p>
+
+            <div id="cardRevealFeedback"></div>
 
             <div class="deck-container">
                 <div class="deck-title">
-                    <span style="color: var(--monster-color);">👹</span>
-                    モンスターカード（課題パターン）
+                    <span style="color: var(--monster-color);">🌑</span>
+                    ダークカード（影の性質）
                 </div>
                 <div class="card-grid" id="monsterCards"></div>
             </div>
 
             <div class="deck-container">
                 <div class="deck-title">
-                    <span style="color: var(--hero-color);">⚔️</span>
-                    ヒーローカード（強み資質）
+                    <span style="color: var(--hero-color);">☀️</span>
+                    ヒーローカード（光の性質）
                 </div>
                 <div class="card-grid" id="heroCards"></div>
             </div>
@@ -1056,98 +1423,118 @@
             selectedQuest: null
         };
 
-        // ===== Quiz Data =====
+        // ===== Quiz Data (Binary Choice Format) =====
         const quizQuestions = [
             {
-                question: "新しいことを始めるとき、あなたはどう感じますか？",
+                question: "仕事の進め方",
+                leftIcon: "⚡",
+                rightIcon: "🎯",
                 options: [
-                    { text: "ワクワクして早く始めたい", monster: 0, hero: 2 },
-                    { text: "計画を立ててから始めたい", monster: 1, hero: 1 },
-                    { text: "不安で躊躇してしまう", monster: 2, hero: 0 },
-                    { text: "誰かと一緒なら始められる", monster: 1, hero: 1 }
+                    { text: "リスクはあるが刺激的な仕事", dark: 0, hero: 2 },
+                    { text: "完璧な計画だが退屈な仕事", dark: 1, hero: 1 }
                 ]
             },
             {
-                question: "困難に直面したとき、どう対処しますか？",
+                question: "新しい挑戦への姿勢",
+                leftIcon: "🚀",
+                rightIcon: "🔍",
                 options: [
-                    { text: "すぐに解決策を考える", monster: 0, hero: 2 },
-                    { text: "一度離れて冷静になる", monster: 1, hero: 1 },
-                    { text: "誰かに相談する", monster: 1, hero: 1 },
-                    { text: "避けて通りたくなる", monster: 2, hero: 0 }
+                    { text: "とりあえず始めてから考える", dark: 0, hero: 2 },
+                    { text: "十分に準備してから始める", dark: 1, hero: 1 }
                 ]
             },
             {
-                question: "チームで作業するとき、あなたの役割は？",
+                question: "困難に直面したとき",
+                leftIcon: "⚔️",
+                rightIcon: "🛡️",
                 options: [
-                    { text: "リーダーとして引っ張る", monster: 0, hero: 2 },
-                    { text: "アイデアを出す", monster: 0, hero: 2 },
-                    { text: "サポート役に徹する", monster: 1, hero: 1 },
-                    { text: "一人で作業したい", monster: 2, hero: 0 }
+                    { text: "正面から立ち向かう", dark: 0, hero: 2 },
+                    { text: "回避策を探す", dark: 1, hero: 1 }
                 ]
             },
             {
-                question: "時間管理について当てはまるのは？",
+                question: "人との関わり方",
+                leftIcon: "👥",
+                rightIcon: "🏔️",
                 options: [
-                    { text: "計画通りに進められる", monster: 0, hero: 2 },
-                    { text: "締め切り直前に集中する", monster: 1, hero: 1 },
-                    { text: "つい先延ばしにしてしまう", monster: 2, hero: 0 },
-                    { text: "複数のことを同時にこなせる", monster: 0, hero: 2 }
+                    { text: "チームで協力したい", dark: 0, hero: 2 },
+                    { text: "一人で集中したい", dark: 1, hero: 1 }
                 ]
             },
             {
-                question: "失敗したとき、どう感じますか？",
+                question: "失敗への向き合い方",
+                leftIcon: "🔥",
+                rightIcon: "💭",
                 options: [
-                    { text: "学びの機会として捉える", monster: 0, hero: 2 },
-                    { text: "少し落ち込むが立ち直る", monster: 1, hero: 1 },
-                    { text: "長く引きずってしまう", monster: 2, hero: 0 },
-                    { text: "次は絶対成功すると燃える", monster: 0, hero: 2 }
+                    { text: "すぐ次に切り替える", dark: 0, hero: 2 },
+                    { text: "深く分析して学ぶ", dark: 1, hero: 1 }
                 ]
             },
             {
-                question: "情報収集の方法は？",
+                question: "情報収集のスタイル",
+                leftIcon: "📚",
+                rightIcon: "🗣️",
                 options: [
-                    { text: "本やネットで徹底的に調べる", monster: 0, hero: 2 },
-                    { text: "詳しい人に直接聞く", monster: 0, hero: 2 },
-                    { text: "とりあえずやってみる", monster: 1, hero: 1 },
-                    { text: "情報が多すぎると混乱する", monster: 2, hero: 0 }
+                    { text: "自分で徹底的に調べる", dark: 0, hero: 2 },
+                    { text: "詳しい人に聞く", dark: 1, hero: 1 }
                 ]
             },
             {
-                question: "モチベーションの源は？",
+                question: "モチベーションの源",
+                leftIcon: "🏆",
+                rightIcon: "❤️",
                 options: [
-                    { text: "達成感や成長実感", monster: 0, hero: 2 },
-                    { text: "人からの評価や感謝", monster: 1, hero: 1 },
-                    { text: "報酬やご褒美", monster: 1, hero: 1 },
-                    { text: "モチベーション維持が苦手", monster: 2, hero: 0 }
+                    { text: "達成感や自己成長", dark: 0, hero: 2 },
+                    { text: "人からの感謝や評価", dark: 1, hero: 1 }
                 ]
             },
             {
-                question: "コミュニケーションスタイルは？",
+                question: "表現の得意分野",
+                leftIcon: "🎤",
+                rightIcon: "✍️",
                 options: [
-                    { text: "積極的に発言する", monster: 0, hero: 2 },
-                    { text: "聞き役が多い", monster: 1, hero: 1 },
-                    { text: "文章での表現が得意", monster: 0, hero: 2 },
-                    { text: "人と話すのが苦手", monster: 2, hero: 0 }
+                    { text: "話して伝える", dark: 0, hero: 2 },
+                    { text: "書いて伝える", dark: 1, hero: 1 }
                 ]
             },
             {
-                question: "創造性について当てはまるのは？",
+                question: "アイデアの生み出し方",
+                leftIcon: "✨",
+                rightIcon: "🔧",
                 options: [
-                    { text: "アイデアが次々と浮かぶ", monster: 0, hero: 2 },
-                    { text: "既存のものを改良するのが得意", monster: 0, hero: 2 },
-                    { text: "指示があれば作れる", monster: 1, hero: 1 },
-                    { text: "創造的な作業は苦手", monster: 2, hero: 0 }
+                    { text: "ゼロから創造する", dark: 0, hero: 2 },
+                    { text: "既存を改良する", dark: 1, hero: 1 }
                 ]
             },
             {
-                question: "ストレス発散方法は？",
+                question: "ストレス時の反応",
+                leftIcon: "🏃",
+                rightIcon: "🧘",
                 options: [
-                    { text: "運動や体を動かす", monster: 0, hero: 2 },
-                    { text: "趣味に没頭する", monster: 0, hero: 2 },
-                    { text: "誰かと話す", monster: 1, hero: 1 },
-                    { text: "ストレスを溜め込みやすい", monster: 2, hero: 0 }
+                    { text: "体を動かして発散", dark: 0, hero: 2 },
+                    { text: "静かに内省する", dark: 1, hero: 1 }
                 ]
             }
+        ];
+
+        // ===== Mystic Feedback Messages =====
+        const mysticFeedbacks = [
+            { message: "興味深い...君には行動力の炎が宿っているようだ", insight: "直感的な判断を信じる傾向がある" },
+            { message: "なるほど...慎重さと大胆さのバランスが見える", insight: "状況に応じて戦略を変えられる" },
+            { message: "ふむ...君の内なる声がはっきりと聞こえてきた", insight: "自己理解が深まりつつある" },
+            { message: "これは予想外だ...隠れた情熱が垣間見える", insight: "表面に出ない強い意志がある" },
+            { message: "面白い...論理と直感が交錯している", insight: "複雑な思考パターンの持ち主" },
+            { message: "深い...君の選択には一貫性がある", insight: "価値観がしっかり形成されている" },
+            { message: "見えてきた...創造性の源泉が明らかになりつつある", insight: "独自の視点を持っている" },
+            { message: "素晴らしい...君の強みが輪郭を帯びてきた", insight: "コアコンピタンスが明確" },
+            { message: "最後の試練だ...君の本質が完全に姿を現す", insight: "自己理解の旅が完了に近づいている" },
+            { message: "全てが明らかになった...君のカードが召喚される時が来た", insight: "診断完了" }
+        ];
+
+        const cardRevealFeedbacks = [
+            "君の魂の深層から、光と影のカードが姿を現した...",
+            "これらのカードは君の可能性と課題を映し出している",
+            "影を知ることは、光を最大限に活かす鍵となる"
         ];
 
         // ===== Card Templates =====
@@ -1200,9 +1587,24 @@
         function init() {
             loadGameState();
             updateProgress();
+            createParticles();
             if (gameState.cycle > 1) {
                 // 2周目以降はクエストからスタート
                 goToScreen('screen-quests');
+            }
+        }
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
             }
         }
 
@@ -1284,59 +1686,80 @@
             goToScreen('screen-quiz');
         }
 
-        // ===== Quiz System =====
+        // ===== Quiz System (Binary Choice) =====
         let currentQuizIndex = 0;
-        let monsterScore = 0;
+        let darkScore = 0;
         let heroScore = 0;
 
         function startQuiz() {
             currentQuizIndex = 0;
-            monsterScore = 0;
+            darkScore = 0;
             heroScore = 0;
             gameState.quizAnswers = [];
-            showQuizQuestion();
+            document.getElementById('mysticFeedbackContainer').innerHTML = '';
+            showBinaryQuestion();
         }
 
-        function showQuizQuestion() {
+        function showBinaryQuestion() {
             if (currentQuizIndex >= quizQuestions.length) {
                 finishQuiz();
                 return;
             }
 
             const q = quizQuestions[currentQuizIndex];
-            document.getElementById('quizQuestion').textContent = q.question;
+            document.getElementById('quizQuestion').textContent = `「${q.question}」`;
             document.getElementById('quizProgress').textContent = `${currentQuizIndex + 1} / ${quizQuestions.length}`;
 
-            const optionsContainer = document.getElementById('quizOptions');
-            optionsContainer.innerHTML = '';
+            // Set icons and text for binary choices
+            document.getElementById('choiceLeftIcon').textContent = q.leftIcon;
+            document.getElementById('choiceRightIcon').textContent = q.rightIcon;
+            document.getElementById('choiceLeftText').textContent = q.options[0].text;
+            document.getElementById('choiceRightText').textContent = q.options[1].text;
 
-            q.options.forEach((opt, index) => {
-                const optDiv = document.createElement('div');
-                optDiv.className = 'quiz-option';
-                optDiv.textContent = opt.text;
-                optDiv.onclick = () => selectQuizOption(index);
-                optionsContainer.appendChild(optDiv);
-            });
+            // Reset card styles
+            document.getElementById('choiceLeft').classList.remove('selected', 'swiped-left', 'swiped-right');
+            document.getElementById('choiceRight').classList.remove('selected', 'swiped-left', 'swiped-right');
         }
 
-        function selectQuizOption(index) {
+        function selectBinaryChoice(index) {
             const q = quizQuestions[currentQuizIndex];
             const opt = q.options[index];
 
-            monsterScore += opt.monster;
+            darkScore += opt.dark;
             heroScore += opt.hero;
             gameState.quizAnswers.push(index);
 
-            // Visual feedback
-            document.querySelectorAll('.quiz-option').forEach((o, i) => {
-                o.classList.remove('selected');
-                if (i === index) o.classList.add('selected');
-            });
+            // Visual feedback - swipe animation
+            const leftCard = document.getElementById('choiceLeft');
+            const rightCard = document.getElementById('choiceRight');
+
+            if (index === 0) {
+                leftCard.classList.add('selected');
+                rightCard.classList.add('swiped-right');
+            } else {
+                rightCard.classList.add('selected');
+                leftCard.classList.add('swiped-left');
+            }
+
+            // Show mystic feedback
+            showMysticFeedback(currentQuizIndex);
 
             setTimeout(() => {
                 currentQuizIndex++;
-                showQuizQuestion();
-            }, 500);
+                showBinaryQuestion();
+            }, 1500);
+        }
+
+        function showMysticFeedback(index) {
+            const feedback = mysticFeedbacks[index];
+            const container = document.getElementById('mysticFeedbackContainer');
+
+            container.innerHTML = `
+                <div class="mystic-feedback">
+                    <p>「${feedback.message}」</p>
+                    <div class="insight">${feedback.insight}</div>
+                </div>
+            `;
         }
 
         function finishQuiz() {
@@ -1346,13 +1769,13 @@
 
         // ===== Card Generation =====
         function generateCards() {
-            // Generate monster cards based on score
-            const numMonsters = Math.min(3, Math.ceil(monsterScore / 5));
+            // Generate dark cards based on score
+            const numDark = Math.min(3, Math.ceil(darkScore / 5));
             gameState.monsterCards = [];
-            for (let i = 0; i < numMonsters; i++) {
+            for (let i = 0; i < numDark; i++) {
                 const template = monsterTemplates[i % monsterTemplates.length];
                 gameState.monsterCards.push({
-                    id: 'monster_' + i,
+                    id: 'dark_' + i,
                     ...template,
                     level: 1
                 });
@@ -1371,27 +1794,41 @@
             }
 
             renderCards();
+            showCardRevealFeedback();
             generateQuests();
             saveGameState();
+        }
+
+        function showCardRevealFeedback() {
+            const container = document.getElementById('cardRevealFeedback');
+            const randomFeedback = cardRevealFeedbacks[Math.floor(Math.random() * cardRevealFeedbacks.length)];
+
+            container.innerHTML = `
+                <div class="mystic-feedback">
+                    <p>「${randomFeedback}」</p>
+                </div>
+            `;
         }
 
         function renderCards() {
             const monsterContainer = document.getElementById('monsterCards');
             const heroContainer = document.getElementById('heroCards');
 
+            // Render Dark Cards (Tarot style)
             monsterContainer.innerHTML = gameState.monsterCards.map(card => `
-                <div class="mini-card">
-                    <div class="mini-card-icon">${card.icon}</div>
-                    <div class="mini-card-name">${card.name}</div>
-                    <div class="mini-card-desc">${card.desc}</div>
+                <div class="tarot-card monster-type">
+                    <div class="card-icon">${card.icon}</div>
+                    <div class="card-name">${card.name}</div>
+                    <div class="card-desc">${card.desc}</div>
                 </div>
             `).join('');
 
+            // Render Hero Cards (Tarot style)
             heroContainer.innerHTML = gameState.heroCards.map(card => `
-                <div class="mini-card">
-                    <div class="mini-card-icon">${card.icon}</div>
-                    <div class="mini-card-name">${card.name}</div>
-                    <div class="mini-card-desc">${card.desc}</div>
+                <div class="tarot-card hero-type">
+                    <div class="card-icon">${card.icon}</div>
+                    <div class="card-name">${card.name}</div>
+                    <div class="card-desc">${card.desc}</div>
                 </div>
             `).join('');
         }
@@ -1739,16 +2176,16 @@ ${record.content}
             document.getElementById('finalContents').textContent = gameState.generatedContents.length;
             document.getElementById('finalSkills').textContent = gameState.skillCards.length;
 
-            // Render skill cards
+            // Render skill cards (Tarot style)
             const skillContainer = document.getElementById('skillCards');
             if (gameState.skillCards.length === 0) {
                 skillContainer.innerHTML = '<p style="color: var(--text-muted);">まだスキルを獲得していません</p>';
             } else {
                 skillContainer.innerHTML = gameState.skillCards.map(card => `
-                    <div class="mini-card">
-                        <div class="mini-card-icon">${card.icon}</div>
-                        <div class="mini-card-name">${card.name}</div>
-                        <div class="mini-card-desc">${card.desc}</div>
+                    <div class="tarot-card skill-type">
+                        <div class="card-icon">${card.icon}</div>
+                        <div class="card-name">${card.name}</div>
+                        <div class="card-desc">${card.desc}</div>
                     </div>
                 `).join('');
             }
