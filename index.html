@@ -1949,25 +1949,64 @@
             if (!gameState.selectedQuest) return;
 
             const quest = gameState.quests.find(q => q.id === gameState.selectedQuest);
+            const note = document.getElementById('questNote').value.trim();
+
             if (quest) {
                 quest.completed = true;
-                quest.note = document.getElementById('questNote').value;
+                quest.note = note;
 
-                // Check for skill acquisition
-                checkSkillAcquisition();
+                // Auto-register note as activity record
+                if (note) {
+                    const record = {
+                        id: 'record_' + Date.now(),
+                        title: quest.title + 'を完了',
+                        content: note,
+                        questId: quest.id,
+                        createdAt: new Date().toISOString()
+                    };
+                    gameState.records.push(record);
+
+                    // Check for skill acquisition based on records
+                    checkSkillAcquisition();
+                }
             }
 
             saveGameState();
             closeModal();
             renderQuests();
+
+            // Show feedback
+            if (note) {
+                showActionFeedback('行動が記録されました。この積み重ねがスキルとなる...');
+            }
+        }
+
+        function showActionFeedback(message) {
+            const existingFeedback = document.querySelector('.action-feedback');
+            if (existingFeedback) existingFeedback.remove();
+
+            const feedback = document.createElement('div');
+            feedback.className = 'mystic-feedback action-feedback';
+            feedback.innerHTML = `<p>「${message}」</p>`;
+            feedback.style.position = 'fixed';
+            feedback.style.bottom = '20px';
+            feedback.style.left = '50%';
+            feedback.style.transform = 'translateX(-50%)';
+            feedback.style.zIndex = '1001';
+            feedback.style.maxWidth = '90%';
+            document.body.appendChild(feedback);
+
+            setTimeout(() => {
+                feedback.remove();
+            }, 3000);
         }
 
         function checkSkillAcquisition() {
-            const completedCount = gameState.quests.filter(q => q.completed).length;
+            const recordCount = gameState.records.length;
 
-            // Award skill every 3 completed quests
-            if (completedCount > 0 && completedCount % 3 === 0) {
-                const skillIndex = Math.floor(completedCount / 3) - 1;
+            // Award skill every 3 records (actions)
+            if (recordCount > 0 && recordCount % 3 === 0) {
+                const skillIndex = Math.floor(recordCount / 3) - 1;
                 if (skillIndex < skillTemplates.length && !gameState.skillCards.find(s => s.id === 'skill_' + skillIndex)) {
                     const template = skillTemplates[skillIndex];
                     gameState.skillCards.push({
@@ -1976,7 +2015,10 @@
                         level: 1,
                         acquiredAt: new Date().toISOString()
                     });
-                    alert(`新しいスキル「${template.name}」を獲得しました！`);
+
+                    setTimeout(() => {
+                        showActionFeedback(`新しいスキル「${template.name}」を獲得！行動の積み重ねが力となった...`);
+                    }, 500);
                 }
             }
         }
@@ -2012,6 +2054,9 @@
                 createdAt: new Date().toISOString()
             });
 
+            // Check for skill acquisition based on records
+            checkSkillAcquisition();
+
             // Clear form
             document.getElementById('recordTitle').value = '';
             document.getElementById('recordContent').value = '';
@@ -2022,6 +2067,9 @@
 
             // Update stats
             document.getElementById('totalRecords').textContent = gameState.records.length;
+
+            // Show feedback
+            showActionFeedback('行動が記録されました。この積み重ねがスキルとなる...');
         }
 
         function renderRecords() {
